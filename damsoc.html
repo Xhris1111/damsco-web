@@ -47,7 +47,7 @@
 html{ scroll-behavior:smooth; }
 body{
   margin:0;
-  background:var(--cream);
+  background:linear-gradient(180deg, #fcf8f0 0%, var(--cream) 100%);
   color:var(--text-dark);
   font-family:'Manrope',sans-serif;
   -webkit-font-smoothing:antialiased;
@@ -124,6 +124,7 @@ a:focus-visible, button:focus-visible{
   background:rgba(27,22,17,0.94);
   backdrop-filter:blur(10px);
   border-bottom:1px solid var(--line-on-ink);
+  box-shadow:0 8px 24px rgba(12,9,6,0.12);
 }
 .site-nav .wrap{
   display:flex; align-items:center; justify-content:space-between;
@@ -180,23 +181,47 @@ a:focus-visible, button:focus-visible{
 .nav-toggle.open span:nth-child(2){ opacity:0; }
 .nav-toggle.open span:nth-child(3){ top:11px; transform:rotate(-45deg); }
 
+body.nav-open{ overflow:hidden; }
+.nav-overlay{
+  position:fixed; inset:0;
+  background:rgba(10,8,6,0.7);
+  opacity:0; pointer-events:none;
+  transition:opacity .3s ease;
+  z-index:400;
+}
+.nav-overlay.show{ opacity:1; pointer-events:auto; }
+
 @media(max-width:900px){
-  .nav-toggle{ display:block; }
+  .site-nav{ z-index:900; }
+  .site-nav .wrap{ min-height:74px; padding:14px 20px; }
+  .brand{ gap:8px; }
+  .brand img{ height:34px; }
+  .brand-name{ font-size:1.1rem; }
+  .nav-toggle{ display:flex; align-items:center; justify-content:center; padding:6px; }
   .nav-links{
-    position:fixed; top:82px; left:0; right:0; bottom:0;
-    background:var(--ink);
+    position:fixed; top:74px; left:16px; right:16px;
+    max-width:420px; margin:0 auto;
+    background:rgba(27,22,17,0.72);
+    backdrop-filter:blur(18px) saturate(140%);
+    -webkit-backdrop-filter:blur(18px) saturate(140%);
+    border:1px solid rgba(239,231,216,0.2);
+    border-radius:18px;
+    box-shadow:0 18px 44px rgba(8,6,4,0.35);
     flex-direction:column;
     align-items:stretch;
-    padding:20px 24px;
-    gap:4px;
-    transform:translateY(-8px);
-    opacity:0;
-    visibility:hidden;
-    transition:opacity .3s ease, transform .3s ease, visibility .3s;
+    padding:8px 10px;
+    gap:0;
+    transform:translateY(-12px) scale(0.98);
+    opacity:0; visibility:hidden; pointer-events:none;
+    transition:opacity .25s ease, transform .25s ease, visibility .25s ease;
     overflow-y:auto;
+    z-index:500;
+    max-height:calc(100dvh - 92px);
   }
-  .nav-links.open{ opacity:1; visibility:visible; transform:translateY(0); }
-  .nav-links a{ padding:16px 4px; border-bottom:1px solid var(--line-on-ink); font-size:1.05rem; }
+  .nav-links.open{ opacity:1; visibility:visible; pointer-events:auto; transform:translateY(0) scale(1); }
+  .nav-links li{ width:100%; }
+  .nav-links a{ display:block; padding:14px 12px; border-bottom:1px solid var(--line-on-ink); font-size:1rem; }
+  .nav-links li:last-child a{ border-bottom:none; }
   .nav-links a::after{ display:none; }
 }
 
@@ -220,11 +245,12 @@ a:focus-visible, button:focus-visible{
   font-weight:700;
   font-size:0.92rem;
   letter-spacing:0.02em;
-  border-radius:var(--radius);
+  border-radius:999px;
   border:1px solid transparent;
   transition:transform .25s ease, background .25s ease, color .25s ease, border-color .25s ease, box-shadow .25s ease;
   cursor:pointer;
   white-space:nowrap;
+  box-shadow:0 10px 24px rgba(20,14,8,0.08);
 }
 .btn-primary{ background:var(--rust); color:var(--white); box-shadow:var(--shadow-sm); }
 .btn-primary:hover{ background:var(--rust-light); transform:translateY(-2px); }
@@ -291,6 +317,9 @@ section.block{ padding:100px 0; }
   padding:8px 16px;
   border-radius:100px;
   margin-bottom:28px;
+  background:rgba(255,255,255,0.06);
+  backdrop-filter:blur(8px);
+  box-shadow:0 10px 30px rgba(0,0,0,0.12);
 }
 .hero-tag span{ width:6px; height:6px; border-radius:50%; background:var(--gold-light); }
 .hero h1{
@@ -299,6 +328,7 @@ section.block{ padding:100px 0; }
   line-height:1.04;
   max-width:14ch;
   font-weight:600;
+  text-shadow:0 10px 30px rgba(0,0,0,0.22);
 }
 .hero h1 em{ font-style:italic; color:var(--gold-light); font-weight:500; }
 .hero-sub{
@@ -388,6 +418,8 @@ section.block{ padding:100px 0; }
   background:var(--white);
   border:1px solid var(--line);
   position:relative;
+  border-radius:18px;
+  box-shadow:0 16px 32px -24px rgba(20,14,8,0.35);
 }
 .pillar .num{ font-family:'IBM Plex Mono',monospace; color:var(--gold); font-size:0.8rem; letter-spacing:0.1em; }
 .pillar h3{ margin-top:16px; font-size:1.3rem; }
@@ -407,6 +439,8 @@ section.block{ padding:100px 0; }
   border:1px solid var(--line);
   padding:36px 30px;
   position:relative;
+  border-radius:18px;
+  box-shadow:0 16px 32px -24px rgba(20,14,8,0.28);
   transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;
 }
 .service-card:hover{ transform:translateY(-6px); box-shadow:var(--shadow-lg); border-color:transparent; }
@@ -477,6 +511,8 @@ section.block{ padding:100px 0; }
   background:var(--white);
   border:1px solid var(--line);
   overflow:hidden;
+  border-radius:18px;
+  box-shadow:0 16px 32px -24px rgba(20,14,8,0.28);
   transition:transform .3s ease, box-shadow .3s ease;
 }
 .listing-card:hover{ transform:translateY(-6px); box-shadow:var(--shadow-lg); }
@@ -537,6 +573,8 @@ section.block{ padding:100px 0; }
   padding:30px 26px;
   position:relative;
   overflow:hidden;
+  border-radius:18px;
+  box-shadow:0 16px 32px -24px rgba(20,14,8,0.28);
 }
 .sold-stamp{
   position:absolute; top:22px; right:-34px;
@@ -564,6 +602,8 @@ section.block{ padding:100px 0; }
   color:var(--cream);
   padding:34px 28px;
   position:relative;
+  border-radius:18px;
+  box-shadow:0 20px 36px -24px rgba(8,6,4,0.45);
 }
 .testi-stars{ display:flex; gap:4px; color:var(--gold-light); margin-bottom:18px; }
 .testi-stars svg{ width:15px; height:15px; }
@@ -577,9 +617,10 @@ section.block{ padding:100px 0; }
    ============================================================ */
 /* ---------- Home page promo strip (links to current development) ---------- */
 .promo-strip{
-  background:var(--gold);
+  background:linear-gradient(90deg, var(--gold) 0%, #d5aa58 100%);
   color:var(--ink);
   padding:16px 0;
+  box-shadow:inset 0 -1px 0 rgba(27,22,17,0.08);
 }
 .promo-strip .wrap{
   display:flex; align-items:center; justify-content:center; flex-wrap:wrap;
@@ -595,11 +636,12 @@ section.block{ padding:100px 0; }
 
 .cta-banner{
   position:relative;
-  background:var(--rust);
+  background:linear-gradient(135deg, var(--rust) 0%, var(--rust-dark) 100%);
   color:var(--white);
   padding:70px 0;
   overflow:hidden;
   text-align:center;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,0.16);
 }
 .cta-banner .grid-texture{ opacity:0.12; }
 .cta-banner h2{ color:var(--white); font-size:clamp(1.6rem,3.4vw,2.3rem); position:relative; z-index:2; }
@@ -636,6 +678,8 @@ section.block{ padding:100px 0; }
   border:1px solid var(--line);
   padding:38px 32px;
   text-align:left;
+  border-radius:18px;
+  box-shadow:0 16px 32px -24px rgba(20,14,8,0.28);
   transition:transform .3s ease, box-shadow .3s ease;
 }
 .contact-card:hover{ transform:translateY(-4px); box-shadow:var(--shadow-lg); }
@@ -650,12 +694,14 @@ section.block{ padding:100px 0; }
 .contact-card p{ color:var(--text-muted); font-size:0.92rem; margin-bottom:20px; }
 .contact-info-strip{
   margin-top:60px;
-  background:var(--ink);
+  background:linear-gradient(135deg, var(--ink) 0%, var(--ink-soft) 100%);
   color:var(--cream);
   padding:44px;
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:30px;
+  border-radius:20px;
+  box-shadow:0 20px 40px -24px rgba(8,6,4,0.4);
 }
 .info-block .lbl{ font-family:'IBM Plex Mono',monospace; font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold-light); margin-bottom:10px; }
 .info-block .val{ font-size:1.05rem; color:var(--cream); }
@@ -709,9 +755,9 @@ section.block{ padding:100px 0; }
     </a>
     <ul class="nav-links" id="navLinks">
       <li><a href="#" data-link data-page="home">Home</a></li>
-      <li><a href="#" data-link data-page="about">About</a></li>
       <li><a href="#" data-link data-page="services">Services</a></li>
       <li><a href="#" data-link data-page="projects">Projects</a></li>
+      <li><a href="#" data-link data-page="about">About</a></li>
       <li><a href="#" data-link data-page="contact">Contact</a></li>
     </ul>
     <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
@@ -719,6 +765,7 @@ section.block{ padding:100px 0; }
     </button>
   </div>
 </nav>
+<div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
 
 <main>
 
@@ -730,7 +777,7 @@ section.block{ padding:100px 0; }
   <div class="hero">
     <div class="grid-texture"></div>
     <div class="hero-inner wrap">
-      <div class="hero-tag"><span></span>Real Estate Development — Abuja, Nigeria</div>
+      <div class="hero-tag"><span></span>Real Estate Development — Idu, Abuja</div>
       <h1>Building sustainable <em>communities</em>, one signature at a time</h1>
       <p class="hero-sub">Damscoe is a trusted real estate developer helping individuals and investors buy, sell, manage and grow property across Abuja — grounded in excellence, integrity and result.</p>
       <div class="hero-actions">
@@ -847,7 +894,7 @@ section.block{ padding:100px 0; }
       <h2>Ready to build your future in Abuja?</h2>
       <p>Speak with a Damscoe consultant today — no pressure, just clarity.</p>
       <div class="hero-actions">
-        <a href="tel:+2348106248828" class="btn btn-gold">Call +234 810 624 8828</a>
+        <a href="tel:+2347047454965" class="btn btn-gold">Call +234-7047454965</a>
         <a href="mailto:Chrisokolie@yahoo.com" class="btn btn-ghost">Email Us</a>
       </div>
     </div>
@@ -876,7 +923,7 @@ section.block{ padding:100px 0; }
           <h2 style="margin-bottom:24px;">Communities designed to last</h2>
           <p>Damscoe is a trusted real estate developer, and our main aim is building sustainable communities here in Abuja, Nigeria. From serviced land to fully developed estates, every project we deliver is planned with the next generation in mind — not just the next sale.</p>
           <p>What sets us apart is simple: excellence in how we build, integrity in how we deal, and result in what we deliver. Whether you are acquiring your first plot or expanding a growing property portfolio, our team walks with you from search to signature — and long after.</p>
-          <p>Based in Gwarimpa, Abuja, we work across the city's key growth corridors — helping Nigerians at home and in the diaspora invest with confidence.</p>
+          <p>Based in Idu, Abuja, we work across the city's key growth corridors — helping Nigerians at home and in the diaspora invest with confidence.</p>
           <div class="hero-actions" style="margin-top:20px;">
             <a href="#" class="btn btn-outline-dark" data-link data-page="projects">Explore Our Projects</a>
           </div>
@@ -938,7 +985,7 @@ section.block{ padding:100px 0; }
       <h2>Let's talk about your next investment</h2>
       <p>Our team responds within one business day.</p>
       <div class="hero-actions">
-        <a href="tel:+2348106248828" class="btn btn-gold">Call Us</a>
+        <a href="tel:+2347047454965" class="btn btn-gold">Call Us</a>
         <a href="#" class="btn btn-ghost" data-link data-page="contact">Contact Page</a>
       </div>
     </div>
@@ -971,7 +1018,7 @@ section.block{ padding:100px 0; }
       <p>Tell us what you're trying to achieve — we'll recommend the right path.</p>
       <div class="hero-actions">
         <a href="mailto:Chrisokolie@yahoo.com" class="btn btn-gold">Email Us</a>
-        <a href="tel:+2348106248828" class="btn btn-ghost">Call Us</a>
+        <a href="tel:+2347047454965" class="btn btn-ghost">Call Us</a>
       </div>
     </div>
   </div>
@@ -1015,7 +1062,7 @@ section.block{ padding:100px 0; }
           </div>
           <div class="hero-actions" style="margin-top:26px;">
             <a href="mailto:Chrisokolie@yahoo.com?subject=Reservation%20Enquiry%20-%20Current%20Development" class="btn btn-gold">Reserve a Unit</a>
-            <a href="tel:+2348106248828" class="btn btn-ghost">Call Us</a>
+            <a href="tel:+2347047454965" class="btn btn-ghost">Call Us</a>
           </div>
         </div>
       </div>
@@ -1046,7 +1093,7 @@ section.block{ padding:100px 0; }
       <h2>Found something you like?</h2>
       <p>Reach out today to schedule an inspection or reserve a plot.</p>
       <div class="hero-actions">
-        <a href="tel:+2348106248828" class="btn btn-gold">Call Us</a>
+        <a href="tel:+2347047454965" class="btn btn-gold">Call Us</a>
         <a href="mailto:Chrisokolie@yahoo.com" class="btn btn-ghost">Email an Enquiry</a>
       </div>
     </div>
@@ -1075,7 +1122,7 @@ section.block{ padding:100px 0; }
           </div>
           <h3>Call Us Directly</h3>
           <p>Speak with our team about listings, valuations or a site visit.</p>
-          <a href="tel:+2348106248828" class="btn btn-primary">Call +234 810 624 8828</a>
+          <a href="tel:+2347047454965" class="btn btn-primary">Call +234-7047454965</a>
         </div>
         <div class="contact-card corner-marks">
           <div class="contact-icon">
@@ -1098,23 +1145,28 @@ section.block{ padding:100px 0; }
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 6-9 12-9 12S3 16 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
           </div>
           <h3>Visit Our Office</h3>
-          <p>Gwarimpa, Abuja — serving clients across the FCT.</p>
-          <span class="mono" style="font-size:0.8rem;color:var(--text-muted);">Mon–Sat · 9am – 6pm</span>
+          <p>Office 318 Wetland Plaza, Jabi Abuja.</p>
+          <a href="https://maps.google.com/?q=Office+318+Wetland+Plaza+Jabi+Abuja" target="_blank" rel="noopener" class="btn btn-outline-dark" style="margin-top:10px;" aria-label="Open Google Maps for Office 318 Wetland Plaza, Jabi Abuja">Open Google Maps</a>
+          <span class="mono" style="font-size:0.8rem;color:var(--text-muted);display:block;margin-top:10px;">Mon–Sat · 9am – 6pm</span>
         </div>
       </div>
 
       <div class="contact-info-strip">
         <div class="info-block">
           <div class="lbl">Phone</div>
-          <div class="val"><a href="tel:+2348106248828">+234 810 624 8828</a></div>
+          <div class="val"><a href="tel:+2347047454965">+234-7047454965</a></div>
         </div>
         <div class="info-block">
           <div class="lbl">Email</div>
           <div class="val"><a href="mailto:Chrisokolie@yahoo.com">Chrisokolie@yahoo.com</a></div>
         </div>
         <div class="info-block">
-          <div class="lbl">Service Area</div>
-          <div class="val">Gwarimpa, Abuja &amp; Greater FCT</div>
+          <div class="lbl">Office Address</div>
+          <div class="val"><a href="https://maps.google.com/?q=Office+318+Wetland+Plaza+Jabi+Abuja" target="_blank" rel="noopener" aria-label="Open Google Maps for Office 318 Wetland Plaza, Jabi Abuja">Office 318 Wetland Plaza, Jabi Abuja</a></div>
+        </div>
+        <div class="info-block">
+          <div class="lbl">Social</div>
+          <div class="val"><a href="https://facebook.com/DamscoeProperties" target="_blank" rel="noopener">Facebook: Damscoe properties</a><br><a href="https://instagram.com/damscoe_properties" target="_blank" rel="noopener">Instagram: @damscoe_properties</a></div>
         </div>
       </div>
     </div>
@@ -1158,9 +1210,11 @@ section.block{ padding:100px 0; }
       <div class="footer-col">
         <h5>Contact</h5>
         <ul>
-          <li><a href="tel:+2348106248828">+234 810 624 8828</a></li>
+          <li><a href="tel:+2347047454965">+234-7047454965</a></li>
           <li><a href="mailto:Chrisokolie@yahoo.com">Chrisokolie@yahoo.com</a></li>
-          <li><span style="font-size:0.9rem;">Gwarimpa, Abuja</span></li>
+          <li><a href="https://maps.google.com/?q=Office+318+Wetland+Plaza+Jabi+Abuja" target="_blank" rel="noopener" style="font-size:0.9rem;" aria-label="Open Google Maps for Office 318 Wetland Plaza, Jabi Abuja">Office 318 Wetland Plaza, Jabi Abuja</a></li>
+          <li><a href="https://facebook.com/DamscoeProperties" target="_blank" rel="noopener" style="font-size:0.9rem;">Facebook: Damscoe properties</a></li>
+          <li><a href="https://instagram.com/damscoe_properties" target="_blank" rel="noopener" style="font-size:0.9rem;">Instagram: @damscoe_properties</a></li>
         </ul>
       </div>
     </div>
@@ -1360,6 +1414,9 @@ section.block{ padding:100px 0; }
       navLinks.classList.remove("open");
       navToggle.classList.remove("open");
       navToggle.setAttribute("aria-expanded","false");
+      document.body.classList.remove("nav-open");
+      var navOverlay = document.getElementById("navOverlay");
+      if(navOverlay){ navOverlay.classList.remove("show"); navOverlay.setAttribute("aria-hidden","true"); }
     }
 
     window.scrollTo({ top:0, behavior:"smooth" });
@@ -1394,15 +1451,43 @@ section.block{ padding:100px 0; }
   /* ============================================================
      MOBILE NAV TOGGLE
      ============================================================ */
+  function setMobileNav(isOpen){
+    var navToggle = document.getElementById("navToggle");
+    var navLinks = document.getElementById("navLinks");
+    var navOverlay = document.getElementById("navOverlay");
+    if(!navToggle || !navLinks){ return; }
+    navLinks.classList.toggle("open", isOpen);
+    navToggle.classList.toggle("open", isOpen);
+    navToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    document.body.classList.toggle("nav-open", isOpen);
+    if(navOverlay){
+      navOverlay.classList.toggle("show", isOpen);
+      navOverlay.setAttribute("aria-hidden", isOpen ? "false" : "true");
+    }
+  }
+
   var navToggle = document.getElementById("navToggle");
   var navLinks = document.getElementById("navLinks");
+  var navOverlay = document.getElementById("navOverlay");
   if(navToggle && navLinks){
     navToggle.addEventListener("click", function(){
-      var isOpen = navLinks.classList.toggle("open");
-      navToggle.classList.toggle("open", isOpen);
-      navToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      setMobileNav(!navLinks.classList.contains("open"));
+    });
+    navLinks.querySelectorAll("a[data-page]").forEach(function(link){
+      link.addEventListener("click", function(){ setMobileNav(false); });
     });
   }
+  if(navOverlay){
+    navOverlay.addEventListener("click", function(){ setMobileNav(false); });
+  }
+
+  window.addEventListener("resize", function(){
+    if(window.innerWidth > 900){ setMobileNav(false); }
+  });
+
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape"){ setMobileNav(false); }
+  });
 
   /* ============================================================
      INIT
